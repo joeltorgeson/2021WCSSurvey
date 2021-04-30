@@ -1,0 +1,32 @@
+### Analyzing the Survey Data from my WCS Survey in early April, 2021
+
+### All code written for use in R
+### You'll need to download the survey spreadsheets and update the paths for importing them.
+### I'm also an utter n00b at programming, so please excuse any terrible formatting, etc!
+
+### Installing and loading necessary packages
+install.packages(c("tidyverse"))
+install.packages(c("magrittr","dplyr"))
+install.packages("conjoint")
+library(tidyverse)
+library(readxl)
+
+### Creating master dataset
+wcsdata <- read_excel("~/Desktop/Data Analysis/2021 Survey Data/wcs2021survey.xlsx")
+#glimpse(wcsdata)
+wcs <- data.frame(wcsdata)
+
+
+### Building dataframe of conjoint variables
+cjvars <- read_excel("~/Desktop/Data Analysis/2021 Survey Data/conjointvariables.xlsx")
+cjvars.df <- data.frame(cjvars)
+levels <- c("Full", "Limited", "Strictly", "Fun", "WSDC" )
+levs.df <- data.frame(levels)
+#glimpse(cjvars)
+#levs.df
+
+
+### Conjoint Analysis of All Data
+library(conjoint)
+wcsconjoint <- subset(wcs, select = c(full_strictly:limited_wsdc))
+Conjoint(wcsconjoint, cjvars.df, z=levs.df, y.type = "rank")
